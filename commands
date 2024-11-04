@@ -1,0 +1,9 @@
+Deploy contract 
+npx hardhat run ./scripts/deploy.js --network localhost
+npx hardhat run ./scripts/deploynodes.js --network localhost
+
+start blockchain
+npx hardhat node
+
+run react
+npm run dev

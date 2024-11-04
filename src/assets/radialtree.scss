@@ -1,0 +1,13 @@
+@import "colors";
+
+.highlight {
+    stroke: $selected-node-color; /* Color for highlighted path */
+}
+
+.payed {
+    stroke: $payed-color;
+}
+
+.current-node {
+    color: $selected-node-color;
+}
