@@ -1,13 +1,29 @@
-# Sample Hardhat Project
+Watch this first:
+[![Introduction](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+Demonstration of Fair DAO:
+[![Demonstration](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
 
-Try running some of the following tasks:
-
+Deploy contract 
 ```shell
-npx hardhat help
+npx hardhat run ./scripts/deploy.js --network localhost
+```
+
+Deploy contract with test organization
+```shell
+npx hardhat run ./scripts/deploynodes.js --network localhost
+```
+
+Run tests
+```shell
 npx hardhat test
-REPORT_GAS=true npx hardhat test
+```
+
+Start blockchain
+```shell
 npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
+```
+Run react
+```shell
+npm run dev
 ```
