@@ -6,13 +6,15 @@ import NodeABI from '../../artifacts/contracts/fd.sol/Node.json'
 import RadialTreeChart from './RadialTreeChart.jsx'
 import TidyTreeChart from './TidyTreeChart.jsx'
 import "../assets/fairdaosearch.scss";
+import PullDownHeader from './FairDaoSeatch/PullDownHeader.jsx'
+
+import {OPTION_ADDRESS} from "../constants/options.js"
+import {OPTION_CONTRIBUTION} from "../constants/options.js"
+import {OPTION_OWNER} from "../constants/options.js"
+import {OPTION_TIDY} from "../constants/options.js"
+import {OPTION_RADIAL} from "../constants/options.js"
 
 const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, nodeAddress, setNodeAddress, payedNodes, setPayedNodes}) => {
-    const OPTION_ADDRESS = "address";
-    const OPTION_CONTRIBUTION = "contribution";
-    const OPTION_OWNER = "owner";
-    const OPTION_RADIAL = "radial";
-    const OPTION_TIDY = "tidy";
 
     const [searchValue, setSearchValue] = useState(null);
     const [root, setRoot] = useState(null);
@@ -30,13 +32,7 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
     const [optionValue, setOptionValue] = useState(null);
     const [optionTreeValue, setOptionTreeValue] = useState(OPTION_RADIAL);
 
-    const handleOptionChange = async (value) => {
-        setOptionValue(value.target.value);
-    }
 
-    const handleChartOptionChange = async (value) => {
-        setOptionTreeValue(value.target.value);
-    }
     const handleOrderChange = async (value) => {
      setFdOrder(value.target.value);
     }
@@ -219,17 +215,11 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
             </div>
             <div className="search card glass my-10">
                 <div className="card-body">
-                    {root != null && <div className="flex justify-between">
-                        <select onChange={handleOptionChange} className="select select-primary mx-5 text-left">
-                            <option value={OPTION_ADDRESS}>Address</option>
-                            <option value={OPTION_CONTRIBUTION}>Contribution</option>
-                            <option value={OPTION_OWNER}>Owner</option>
-                        </select>
-                        <select onChange={handleChartOptionChange} className="select select-primary text-right">
-                            <option className="text-left" value={OPTION_RADIAL}>Radial Tree</option>
-                            <option className="text-left" value={OPTION_TIDY}>Tidy Tree</option>
-                        </select>
-                    </div>}
+                <PullDownHeader root={root}
+                            optionValue={optionValue}
+                            setOptionValue={setOptionValue} 
+                            optionTreeValue={optionTreeValue}
+                            setOptionTreeValue={setOptionTreeValue}/>
                     <div>
                         {fdAddress != null && <p>Organization Created At: {fdAddress}</p>}
                         <div className="flex">
