@@ -9,6 +9,7 @@ import "../assets/fairdaosearch.scss";
 import PullDownHeader from './FairDaoSearch/PullDownHeader.jsx'
 import CreateFairDao from './FairDaoSearch/CreateFairDao.jsx'
 import LoadFairDao from './FairDaoSearch/LoadFairDao.jsx'
+import LookupEmployeeContract from './FairDaoSearch/LookupEmployeeContract.jsx'
 
 import {OPTION_ADDRESS} from "../constants/options.js"
 import {OPTION_CONTRIBUTION} from "../constants/options.js"
@@ -33,28 +34,6 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
     const [abbrAddressMap, setAddressMap] = useState({});
     const [optionValue, setOptionValue] = useState(null);
     const [optionTreeValue, setOptionTreeValue] = useState(OPTION_RADIAL);
-
-    const handleAtoNChange = async (value) => {
-        setOwner(value.target.value);
-    }
-
-    const handleAtoNClick = async () => {
-        if (fairDao == null) {
-            setNoFDError("Please load a FairDao Contract");
-            return;
-        }
-        setNoFDError(null);
-        if (owner == null || !ethers.isAddress(owner)) {
-            return;
-        }
-        const _node = await fairDao.getNode(owner);
-        const node = new ethers.Contract(_node, NodeABI["abi"], signer);
-        setNode(node);
-        const nodeAddress = await node.getAddress();
-        setNodeAddress(nodeAddress);
-        const ownerBalance = await provider.getBalance(owner);
-        setOwnerBalance(ownerBalance.toString());
-    }
 
     const handleAbbrAddressChange = async (value) => {
         setAbbrAddress(value.target.value);
@@ -208,18 +187,19 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
                     setOwnerBalance={setOwnerBalance} 
                     setTree={setTree} 
                     setFdAddress={setFdAddress} />
-                    <div>
-                        {noFDError != null && <p>{noFDError}</p>}
-                        {nodeAddress != null && <p className="selected-node">Employee Contract Address: {nodeAddress}</p>}
-                        {ownerBalance != null && <p>Employee Address Balance: {ownerBalance} </p>}
-                        <div className="flex">
-                            <button 
-                            type="button"
-                            className="address-to-node-button btn btn-outline btn-primary mx-5 px-7"
-                            onClick={handleAtoNClick}>Lookup Employee Contract</button>
-                            <input type="text" placeholder="Employee Address" className="address-to-node-input input input-bordered input-ghost w-full max-w-xs" onChange={handleAtoNChange}></input>
-                        </div>
-                    </div>
+                <LookupEmployeeContract
+                    signer={signer} 
+                    provider={provider}
+                    setOwner={setOwner} 
+                    fairDao={fairDao} 
+                    noFDError={noFDError} 
+                    setNoFDError={setNoFDError} 
+                    owner={owner} 
+                    setNode={setNode} 
+                    nodeAddress={nodeAddress} 
+                    setNodeAddress={setNodeAddress} 
+                    ownerBalance={ownerBalance}
+                    setOwnerBalance={setOwnerBalance}/>
                     <div>
                         {nodeAddress != null && <p className="selected-node">Employee Contract Address: {nodeAddress} </p>}
                         <div className="flex">
