@@ -8,6 +8,7 @@ import TidyTreeChart from './TidyTreeChart.jsx'
 import "../assets/fairdaosearch.scss";
 import PullDownHeader from './FairDaoSearch/PullDownHeader.jsx'
 import CreateFairDao from './FairDaoSearch/CreateFairDao.jsx'
+import LoadFairDao from './FairDaoSearch/LoadFairDao.jsx'
 
 import {OPTION_ADDRESS} from "../constants/options.js"
 import {OPTION_CONTRIBUTION} from "../constants/options.js"
@@ -33,22 +34,6 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
     const [optionValue, setOptionValue] = useState(null);
     const [optionTreeValue, setOptionTreeValue] = useState(OPTION_RADIAL);
 
-    const handleSearchChange = async (value) => {
-        setSearchValue(value.target.value);
-    }
-    const handleSearchClick = async () => {
-        if (searchValue == null || !ethers.isAddress(searchValue)) {
-            return;
-        }
-        const fairDao = new ethers.Contract(searchValue, FairDaoABI["abi"], signer);
-        setFairDao(fairDao);
-        const root = await fairDao.getRoot();
-        setRoot(root);
-        setNode(null);
-        setNodeAddress(null);
-        setOwnerBalance(null);
-        setTree(null);
-    }
     const handleAtoNChange = async (value) => {
         setOwner(value.target.value);
     }
@@ -211,16 +196,18 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
                     setNodeAddress={setNodeAddress} 
                     setOwnerBalance={setOwnerBalance} 
                     setTree={setTree} />
-                    <div>
-                        {root != null && <p>Organization Root (CEO): {root}</p>}
-                        <div className="flex">
-                            <button 
-                            type="button"
-                            className="search-fd-button btn btn-outline btn-primary mx-5 px-14"
-                            onClick={handleSearchClick}>Load Organization</button>
-                            <input type="text" placeholder="Address" className="search-fd-input input input-bordered w-full max-w-xs input-ghost " onChange={handleSearchChange}></input>
-                        </div>
-                    </div>
+                <LoadFairDao
+                    signer={signer}
+                    searchValue={searchValue} 
+                    setSearchValue={setSearchValue} 
+                    setFairDao={setFairDao} 
+                    root={root} 
+                    setRoot={setRoot} 
+                    setNode={setNode} 
+                    setNodeAddress={setNodeAddress} 
+                    setOwnerBalance={setOwnerBalance} 
+                    setTree={setTree} 
+                    setFdAddress={setFdAddress} />
                     <div>
                         {noFDError != null && <p>{noFDError}</p>}
                         {nodeAddress != null && <p className="selected-node">Employee Contract Address: {nodeAddress}</p>}
