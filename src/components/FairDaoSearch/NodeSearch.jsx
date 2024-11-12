@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { useEffect, useState } from 'react'
-import NodeABI from '../../artifacts/contracts/fd.sol/Node.json'
-import "../assets/nodesearch.scss"
+import NodeABI from '../../../artifacts/contracts/fd.sol/Node.json'
+import "../../assets/nodesearch.scss"
 
 const FairDaoSearch = ({signer, provider, node, setNode, nodeAddress, setNodeAddress, payedNodes, setPayedNodes}) => {
     const [searchValue, setSearchValue] = useState(null);

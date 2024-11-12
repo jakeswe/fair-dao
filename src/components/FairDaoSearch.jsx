@@ -1,6 +1,6 @@
 import { ethers, VoidSigner } from 'ethers'
 import { useEffect, useState } from 'react'
-import NodeSearch from './NodeSearch.jsx'
+import NodeSearch from './FairDaoSearch/NodeSearch.jsx'
 import FairDaoABI from '../../artifacts/contracts/fd.sol/FairDao.json'
 import NodeABI from '../../artifacts/contracts/fd.sol/Node.json'
 import RadialTreeChart from './RadialTreeChart.jsx'
@@ -17,6 +17,7 @@ import {OPTION_CONTRIBUTION} from "../constants/options.js"
 import {OPTION_OWNER} from "../constants/options.js"
 import {OPTION_TIDY} from "../constants/options.js"
 import {OPTION_RADIAL} from "../constants/options.js"
+import AddChild from './FairDaoSearch/AddChild.jsx'
 
 const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, nodeAddress, setNodeAddress, payedNodes, setPayedNodes}) => {
 
@@ -36,28 +37,6 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
     const [optionValue, setOptionValue] = useState(null);
     const [optionTreeValue, setOptionTreeValue] = useState(OPTION_RADIAL);
 
-    const handleChildAddedChange = async (value) => {
-        setChildAddress(value.target.value)
-    }
-
-    const handleChildAddedClick = async () => {
-        if (node == null) {
-            setNoNodeError("Please load Node Contract");
-            return;
-        }
-        setNoNodeError(null);
-        if (childAddress == null || !ethers.isAddress(childAddress)){
-            return;
-        }
-        const tx = await fairDao.insert(nodeAddress, childAddress);
-        const receipt = await tx.wait();
-        /* const events = receipt.logs
-            .map(log => fairDao.interface.parseLog(log)) // Parse each log
-            .filter(event => event.name === "ChildAddedEvent");
-        for (const k in events){
-            console.log(events[k].args.added)
-        }*/
-    }
     const formatAddress = (address) => {
         const addressLength = address.length;
         return address.slice(0, 6) + "..." + address.slice(addressLength - 3, addressLength);
@@ -191,24 +170,22 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
                     setNodeAddress={setNodeAddress} 
                     setOwner={setOwner} 
                     setOwnerBalance={setOwnerBalance}/>
-                    <div className="add-child">
-                        {noNodeError != null && <p>{noNodeError}</p>}
-                        <div className="flex">
-                            <button 
-                                    type="button"
-                                    className="add-child-button btn btn-outline btn-primary mx-5 px-10"
-                                    onClick={handleChildAddedClick}>Add Employee Contract </button>
-                            <input type="text" placeholder="Employee Address" className="add-child-input input input-bordered input-ghost w-full max-w-xs" onChange={handleChildAddedChange}></input>
-                        </div>
-                    </div>
-                    <NodeSearch signer={signer} 
-                        provider={provider}
-                        node={node} 
-                        setNode={setNode} 
-                        nodeAddress={nodeAddress}
-                        setNodeAddress={setNodeAddress}
-                        payedNodes={payedNodes}
-                        setPayedNodes={setPayedNodes} />
+                <AddChild
+                    childAddress={childAddress} 
+                    setChildAddress={setChildAddress} 
+                    node={node} 
+                    nodeAddress={nodeAddress}
+                    noNodeError={noNodeError}
+                    setNoNodeError={setNoNodeError} 
+                    fairDao={fairDao}/>
+                <NodeSearch signer={signer} 
+                    provider={provider}
+                    node={node} 
+                    setNode={setNode} 
+                    nodeAddress={nodeAddress}
+                    setNodeAddress={setNodeAddress}
+                    payedNodes={payedNodes}
+                    setPayedNodes={setPayedNodes} />
                 </div>
             </div>
         </div>
