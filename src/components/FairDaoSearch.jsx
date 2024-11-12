@@ -10,6 +10,7 @@ import PullDownHeader from './FairDaoSearch/PullDownHeader.jsx'
 import CreateFairDao from './FairDaoSearch/CreateFairDao.jsx'
 import LoadFairDao from './FairDaoSearch/LoadFairDao.jsx'
 import LookupEmployeeContract from './FairDaoSearch/LookupEmployeeContract.jsx'
+import LookupAbbrAddress from './FairDaoSearch/LookupAbbrAddress.jsx'
 
 import {OPTION_ADDRESS} from "../constants/options.js"
 import {OPTION_CONTRIBUTION} from "../constants/options.js"
@@ -34,27 +35,6 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
     const [abbrAddressMap, setAddressMap] = useState({});
     const [optionValue, setOptionValue] = useState(null);
     const [optionTreeValue, setOptionTreeValue] = useState(OPTION_RADIAL);
-
-    const handleAbbrAddressChange = async (value) => {
-        setAbbrAddress(value.target.value);
-    }
-
-    const handleAbbrAddressClick = async () => {
-        if (abbrAddress == null) {
-            return;
-        }
-        const nodeAddress = abbrAddressMap[abbrAddress];
-        if (nodeAddress == null) {
-            return;
-        }
-        const node = new ethers.Contract(nodeAddress, NodeABI["abi"], signer);
-        setNode(node);
-        setNodeAddress(nodeAddress);
-        const owner = await node.getOwner();
-        setOwner(owner);
-        const ownerBalance = await provider.getBalance(owner);
-        setOwnerBalance(ownerBalance.toString());
-    }
 
     const handleChildAddedChange = async (value) => {
         setChildAddress(value.target.value)
@@ -200,16 +180,17 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
                     setNodeAddress={setNodeAddress} 
                     ownerBalance={ownerBalance}
                     setOwnerBalance={setOwnerBalance}/>
-                    <div>
-                        {nodeAddress != null && <p className="selected-node">Employee Contract Address: {nodeAddress} </p>}
-                        <div className="flex">
-                            <button 
-                            type="button"
-                            className="abbr-address-button btn btn-outline btn-primary mx-5 px-7"
-                            onClick={handleAbbrAddressClick}>Lookup Employee Contract </button>
-                            <input type="text" placeholder="0x0000...000" className="abbt-address-input input input-bordered input-ghost w-full max-w-xs" onChange={handleAbbrAddressChange}></input>
-                        </div>
-                    </div>
+                <LookupAbbrAddress
+                    signer={signer} 
+                    provider={provider} 
+                    abbrAddress={abbrAddress} 
+                    setAbbrAddress={setAbbrAddress} 
+                    abbrAddressMap={abbrAddressMap} 
+                    setNode={setNode} 
+                    nodeAddress={nodeAddress} 
+                    setNodeAddress={setNodeAddress} 
+                    setOwner={setOwner} 
+                    setOwnerBalance={setOwnerBalance}/>
                     <div className="add-child">
                         {noNodeError != null && <p>{noNodeError}</p>}
                         <div className="flex">
