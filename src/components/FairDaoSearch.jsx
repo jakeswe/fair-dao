@@ -6,7 +6,8 @@ import NodeABI from '../../artifacts/contracts/fd.sol/Node.json'
 import RadialTreeChart from './RadialTreeChart.jsx'
 import TidyTreeChart from './TidyTreeChart.jsx'
 import "../assets/fairdaosearch.scss";
-import PullDownHeader from './FairDaoSeatch/PullDownHeader.jsx'
+import PullDownHeader from './FairDaoSearch/PullDownHeader.jsx'
+import CreateFairDao from './FairDaoSearch/CreateFairDao.jsx'
 
 import {OPTION_ADDRESS} from "../constants/options.js"
 import {OPTION_CONTRIBUTION} from "../constants/options.js"
@@ -31,31 +32,6 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
     const [abbrAddressMap, setAddressMap] = useState({});
     const [optionValue, setOptionValue] = useState(null);
     const [optionTreeValue, setOptionTreeValue] = useState(OPTION_RADIAL);
-
-
-    const handleOrderChange = async (value) => {
-     setFdOrder(value.target.value);
-    }
-    const handleHireCostChange = async (value) => {
-     setFdHireCost(value.target.value);
-    }
-    const handleCreateFDClick = async (value) => {
-         if (fdOrder == null || !parseInt(fdOrder) || fdHireCost == null || !parseInt(fdHireCost)) {
-             return null;
-         }
-         const factory = new ethers.ContractFactory(FairDaoABI["abi"], FairDaoABI["bytecode"], signer);
-         const contract = await factory.deploy(fdHireCost, fdOrder);
-         const fd = await contract.waitForDeployment();
-         const a = await fd.getAddress();
-         setFairDao(fd);
-         const root = await fd.getRoot();
-         setRoot(root);
-         setFdAddress(a);
-         setNode(null);
-         setNodeAddress(null);
-         setOwnerBalance(null);
-         setTree(null);
-    }
 
     const handleSearchChange = async (value) => {
         setSearchValue(value.target.value);
@@ -215,22 +191,26 @@ const FairDaoSearch = ({signer, provider, fairDao, setFairDao, node, setNode, no
             </div>
             <div className="search card glass my-10">
                 <div className="card-body">
-                <PullDownHeader root={root}
-                            optionValue={optionValue}
-                            setOptionValue={setOptionValue} 
-                            optionTreeValue={optionTreeValue}
-                            setOptionTreeValue={setOptionTreeValue}/>
-                    <div>
-                        {fdAddress != null && <p>Organization Created At: {fdAddress}</p>}
-                        <div className="flex">
-                            <button 
-                            type="button"
-                            className="create-fd-button btn btn-outline btn-primary mx-5 px-10"
-                            onClick={handleCreateFDClick}>Create Organization</button>
-                            <input type="text" placeholder="Team Size" className="order-input input input-bordered w-28 mx-8 input-ghost " onChange={handleOrderChange}></input>
-                            <input type="text" placeholder="Hire Cost" className="hire-cost-input input input-bordered w-40 input-ghost " onChange={handleHireCostChange}></input>
-                        </div>
-                    </div>
+                <PullDownHeader 
+                    root={root}
+                    optionValue={optionValue}
+                    setOptionValue={setOptionValue} 
+                    optionTreeValue={optionTreeValue}
+                    setOptionTreeValue={setOptionTreeValue}/>
+                <CreateFairDao
+                    signer={signer}
+                    fdOrder={fdOrder} 
+                    fdAddress={fdAddress} 
+                    setFdOrder={setFdOrder} 
+                    fdHireCost={fdHireCost} 
+                    setFdHireCost={setFdHireCost}
+                    setFairDao={setFairDao}
+                    setRoot={setRoot}
+                    setFdAddress={setFdAddress}
+                    setNode={setNode}
+                    setNodeAddress={setNodeAddress} 
+                    setOwnerBalance={setOwnerBalance} 
+                    setTree={setTree} />
                     <div>
                         {root != null && <p>Organization Root (CEO): {root}</p>}
                         <div className="flex">
