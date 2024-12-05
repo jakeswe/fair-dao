@@ -1,8 +1,8 @@
 Watch this first:\
-[![Introduction](https://img.youtube.com/vi/pEY4-dTGI_0/0.jpg)](https://www.youtube.com/watch?v=pEY4-dTGI_0)
+[![Introduction](https://img.youtube.com/vi/mr4YNBWRg0g/0.jpg)](https://www.youtube.com/watch?v=mr4YNBWRg0g)
 
 Demonstration of Fair DAO:\
-[![Demonstration](https://img.youtube.com/vi/dg88P5-09uc/0.jpg)](https://www.youtube.com/watch?v=dg88P5-09uc)
+[![Demonstration](https://img.youtube.com/vi/AqTz_a6SqTY/0.jpg)](https://www.youtube.com/watch?v=AqTz_a6SqTY)
 
 Deploy contract 
 ```shell
